@@ -29,56 +29,65 @@ function setStyle(type) {
 
 // Toggle Map Filters (mobile)
 function toggleMapFilters() {
-  const filters = document.querySelector('.bottom-controls');
-  filters.classList.toggle('is-visible');
+  const filters = document.querySelector(".bottom-controls");
+  filters.classList.toggle("is-visible");
 }
 
 // Hide filter pills by default on mobile
 function handleMobileFilters() {
-  const filters = document.querySelector('.bottom-controls');
-  const toggleBtn = document.querySelector('.map-filters-toggle');
+  const filters = document.querySelector(".bottom-controls");
+  const toggleBtn = document.querySelector(".map-filters-toggle");
   if (window.innerWidth <= 600) {
-    filters.classList.remove('is-visible');
-    toggleBtn.style.display = 'flex';
+    filters.classList.remove("is-visible");
+    toggleBtn.style.display = "flex";
   } else {
-    filters.classList.add('is-visible');
-    toggleBtn.style.display = 'none';
+    filters.classList.add("is-visible");
+    toggleBtn.style.display = "none";
   }
 }
-window.addEventListener('resize', handleMobileFilters);
-window.addEventListener('DOMContentLoaded', handleMobileFilters);
+window.addEventListener("resize", handleMobileFilters);
+window.addEventListener("DOMContentLoaded", handleMobileFilters);
 
 map.on("load", () => {
   // Route line
+  // Route line (create once)
   map.addSource("route", {
     type: "geojson",
     data: {
-      type: "Feature",
-      geometry: {
-        type: "LineString",
-        coordinates: [
-          [-76.615, 39.295],
-          [-76.61, 39.292],
-          [-76.605, 39.288],
-        ],
-      },
-    },
+      type: "FeatureCollection",
+      features: [] // empty initially
+    }
   });
 
+  map.addLayer({
+    id: "route",
+    type: "line",
+    source: "route",
+    layout: {
+      "line-join": "round",
+      "line-cap": "round",
+    },
+    paint: {
+      "line-color": "#22C3B3",
+      "line-width": 8,
+    },
+  });
+//  loadRouteFromFile();
+
   // Custom city marker at map center
-  // Accept city image from a variable 
+  // Accept city image from a variable
   const cityData = {
-    img: './assets/icons/city.svg', // Replace with dynamic value from JSON
-    name: 'City Center',
+    img: "./assets/icons/city.svg", // Replace with dynamic value from JSON
+    name: "City Center",
   };
-  const cityMarkerEl = document.createElement('div');
-  cityMarkerEl.className = 'custom-city-marker';
+  const cityMarkerEl = document.createElement("div");
+  cityMarkerEl.className = "custom-city-marker";
   cityMarkerEl.innerHTML = `
     <div class="marker-pin">
       <img src="${cityData.img}" alt="${cityData.name}" class="marker-img" />
     </div>
   `;
-  new mapboxgl.Marker({ element: cityMarkerEl, anchor: 'bottom' })
+  new mapboxgl.Marker({ element: cityMarkerEl, anchor: "bottom" })
     .setLngLat([-76.525583, 39.25904])
     .addTo(map);
 
@@ -86,14 +95,38 @@ map.on("load", () => {
   //CO-ORDINATES:
   const points = {
     food: [
-      { lngLat: [-76.531397, 39.257645], name: "Joe's Diner", address: "123 Main St" },
-      { lngLat: [-76.53085, 39.263673], name: "Pizza Place", address: "456 Elm St" },
-      { lngLat: [-76.526655, 39.262439], name: "Cafe Good Eats", address: "789 Oak Ave" },
-      { lngLat: [-76.51244, 39.25816], name: "Burger Spot", address: "321 Maple Rd" },
+      {
+        lngLat: [-76.531397, 39.257645],
+        name: "Joe's Diner",
+        address: "123 Main St",
+      },
+      {
+        lngLat: [-76.53085, 39.263673],
+        name: "Pizza Place",
+        address: "456 Elm St",
+      },
+      {
+        lngLat: [-76.526655, 39.262439],
+        name: "Cafe Good Eats",
+        address: "789 Oak Ave",
+      },
+      {
+        lngLat: [-76.51244, 39.25816],
+        name: "Burger Spot",
+        address: "321 Maple Rd",
+      },
     ],
     transport: [
-      { lngLat: [-76.5201, 39.2601], name: "Bus Stop A", address: "100 Transit Blvd" },
-      { lngLat: [-76.5185, 39.2623], name: "Metro Station", address: "200 Metro Ave" },
+      {
+        lngLat: [-76.5201, 39.2601],
+        name: "Bus Stop A",
+        address: "100 Transit Blvd",
+      },
+      {
+        lngLat: [-76.5185, 39.2623],
+        name: "Metro Station",
+        address: "200 Metro Ave",
+      },
     ],
     amenities: [
       { lngLat: [-76.5252, 39.2598], name: "City Park", address: "Park Lane" },
@@ -111,7 +144,9 @@ map.on("load", () => {
   const markersByLayer = {};
   for (const layer in points) {
     markersByLayer[layer] = points[layer].map((item) => {
-      const marker = new mapboxgl.Marker({ color: colors[layer] }).setLngLat(item.lngLat);
+      const marker = new mapboxgl.Marker({ color: colors[layer] }).setLngLat(
+        item.lngLat
+      );
       // Use flex column for popup content
       const popupContent = `
         <div class="popup-content-flex">
@@ -119,8 +154,7 @@ map.on("load", () => {
           <span>${item.address}</span>
         </div>
       `;
-      const popup = new mapboxgl.Popup({ offset: 25 })
-        .setHTML(popupContent);
+      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent);
       marker.setPopup(popup);
       return marker;
     });
@@ -150,11 +184,51 @@ map.on("load", () => {
     const btn = e.target.closest(".pill");
     if (!btn) return;
 
-    const layer = btn.dataset.type; 
+    const layer = btn.dataset.type;
     const isOn = toggleLayer(layer);
 
     // active UI
     btn.classList.toggle("is-active", isOn);
     btn.setAttribute("aria-selected", isOn ? "true" : "false");
   });
+
+  // click Nearby Routes cards
+  document.querySelectorAll(".nearby-route-card").forEach((card) => {
+    card.style.cursor = "pointer";
+
+    card.addEventListener("click", async () => {
+      try {
+        const res = await fetch("./data/routes_calculated.geojson"); // adjust path!
+        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        const geojson = await res.json();
+        updateRoute(geojson);
+        console.log('Card Clicked: ', geojson)
+      } catch (err) {
+        console.error("Failed to load route GeoJSON:", err);
+      }
+    });
+  });
 });
+
+// to update the route
+function updateRoute(geojson) {
+  let data = geojson;
+
+  if (geojson.type === "FeatureCollection") {
+    data = geojson.features?.[0];
+  } else if (
+    geojson.type === "LineString" ||
+    geojson.type === "MultiLineString"
+  ) {
+    data = { type: "Feature", properties: {}, geometry: geojson };
+  }
+
+  if (!data || data.type !== "Feature") {
+    console.error("Invalid GeoJSON for route:", geojson);
+    return;
+  }
+
+  const src = map.getSource("route");
+  if (!src) return; // map not loaded yet
+  src.setData(data); // updates route dynamically
+}

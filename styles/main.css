@@ -29,7 +29,7 @@
   --shadow-btn: 0 2px 8px rgba(0, 0, 0, 0.12);
 
   --map-width: 93%;
-  --map-height: 350px;
+  --map-height: 390px;
   --map-margin: 24px;
 
   /* Satellite UI theme */
@@ -295,7 +295,7 @@ body {
 .main-layout-row {
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  width: 90vw;
   min-height: 100vh;
   align-items: flex-start;
   justify-content: flex-start;
