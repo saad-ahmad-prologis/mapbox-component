@@ -233,3 +233,39 @@ function updateRoute(geojson) {
   if (!src) return; // map not loaded yet
   src.setData(data); // updates route dynamically
 }
+// modal-map
+const mapCard = document.getElementById('mapCard');
+const overlay = document.getElementById('mapOverlay');
+const openBtns = document.querySelectorAll('.js-open-map');
+const closeBtn = overlay.querySelector('.map-overlay-close');
+
+function openMapOverlay() {
+    mapCard.classList.add('is-popup');
+    overlay.classList.add('active');
+
+    // resize map if needed
+    setTimeout(() => {
+        if (window.map && map.resize) map.resize();
+    }, 100);
+}
+
+function closeMapOverlay() {
+    mapCard.classList.remove('is-popup');
+    overlay.classList.remove('active');
+
+    setTimeout(() => {
+        if (window.map && map.resize) map.resize();
+    }, 100);
+}
+
+// open from any button
+openBtns.forEach(btn => btn.addEventListener('click', openMapOverlay));
+
+// close
+closeBtn.addEventListener('click', closeMapOverlay);
+
+// optional: ESC to close
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMapOverlay();
+});
+

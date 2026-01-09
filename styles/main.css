@@ -554,3 +554,42 @@ body.is-satellite .map-filters-toggle {
   background: var(--sat-btn-bg);
   color: var(--sat-btn-text);
 }
+/* modal-map */
+.map-card {
+    position: relative; /* anchor overlay */
+}
+
+/* Overlay exactly covers the map-card */
+.map-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.15); /* optional dim */
+}
+
+.map-overlay.active {
+    display: block;
+}
+
+/* Close button: top-right INSIDE map */
+.map-overlay-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 60;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
+/* Hide bottom controls when popup is open */
+.map-card.is-popup .bottom-controls {
+    display: none;
+}

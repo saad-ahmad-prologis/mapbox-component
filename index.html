@@ -16,7 +16,7 @@
 <body>
     <div class="main-layout-row">
         <div class="main-content-col">
-            <div class="map-card">
+            <div class="map-card" id="mapCard">
                 <div id="map"></div>
 
                 <!-- Top right controls -->
@@ -54,6 +54,15 @@
                         <span>Amenities</span>
                     </button>
                 </div>
+                    <!-- Overlay -->
+    <div class="map-overlay" id="mapOverlay">
+        <button class="map-overlay-close" type="button" aria-label="Close map">×</button>
+    </div>
+            </div>
+            <div>
+                <button class="pill js-open-map" type="button" data-type="Open Map" role="tab" aria-selected="false">
+                    <span>Open map</span>
+                </button>
             </div>
             <div class="nearby-routes-section">
                 <h2 class="nearby-routes-title">Nearby Routes</h2>
