@@ -215,7 +215,8 @@ function updateRoute(geojson) {
   let data = geojson;
 
   if (geojson.type === "FeatureCollection") {
-    data = geojson.features?.[0];
+    // data = geojson.features?.[0];
+    data = geojson.features?.[1];
   } else if (
     geojson.type === "LineString" ||
     geojson.type === "MultiLineString"
