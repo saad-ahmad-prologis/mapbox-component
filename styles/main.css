@@ -14,6 +14,9 @@
 
   --color-popup-bg: #004A55;
   --color-popup-tip: #004A55;
+  --color-food-pin: #88FF8D;
+  --color-transport-pin: #DBD94B;
+  --color-amenities-pin: #4BA3DB;
 
   /* Typography */
   --font-main: "Inter", Arial, sans-serif;
@@ -588,7 +591,7 @@ body.is-satellite .map-filters-toggle {
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
-
+/* overlay ends */
 /* Hide bottom controls when popup is open */
 .map-card.is-popup .bottom-controls {
     display: none;
@@ -599,8 +602,8 @@ body.is-satellite .map-filters-toggle {
 }
 
 .pin {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   background: var(--pin-color);
   border-radius: 50% 50% 50% 0;
   transform: rotate(-45deg);
@@ -615,4 +618,53 @@ body.is-satellite .map-filters-toggle {
   left: 50%;
   transform: translate(-50%, -50%) rotate(45deg);
   pointer-events: none;
+}
+/* modal for map */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 9999;
+}
+.modal.is-open { display: block; }
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+}
+
+.modal__panel {
+  position: relative;
+  height: min(92vh, 900px);
+  width: min(96vw, 1200px);
+  margin: 4vh auto;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+  font-size: 28px;
+  line-height: 1;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.modal__body {
+  height: 100%;
+}
+
+/* Ensure the map takes full modal height */
+#mapWrapper { height: 100%; }
+#mapRoot { height: 100%; }
+
+/* Hide bottom filters only when modal is open */
+body.is-map-modal-open .bottom-filters {
+  display: none !important;
 }

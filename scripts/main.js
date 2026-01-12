@@ -1,3 +1,5 @@
+const rootStyles = getComputedStyle(document.documentElement);
+
 // Main JS for Mapbox UI
 mapboxgl.accessToken =
   "pk.eyJ1IjoicGhvbGxpcy1wcm9sb2dpcyIsImEiOiJjbWl4cGt1ajUwN2JpM2RvOXdqOWFmb3U3In0.RyiaedumDC0gnw6FeFKqrA ";
@@ -197,14 +199,19 @@ map.on("load", async () => {
 
   // MARKER COLORS:
   const colors = {
-    food: "#88FF8D",
-    transport: "#DBD94B",
-    amenities: "#4BA3DB",
-  };
+  food: rootStyles.getPropertyValue('--color-food-pin').trim(),
+  transport: rootStyles.getPropertyValue('--color-transport-pin').trim(),
+  amenities: rootStyles.getPropertyValue('--color-amenities-pin').trim(),
+};
+  // const colors = {
+  //   food: "#88FF8D",
+  //   transport: "#DBD94B",
+  //   amenities: "#4BA3DB",
+  // };
 const icons = {
-  food: "./assets/icons/food.svg",
-  transport: "./assets/icons/transport.svg",
-  amenities: "./assets/icons/amenities.svg"
+  food: "./assets/icons/food-dark.svg",
+  transport: "./assets/icons/transport-dark.svg",
+  amenities: "./assets/icons/amenities-dark.svg"
 };
   // Create markers for selected POI/s
   const markersByLayer = {};
